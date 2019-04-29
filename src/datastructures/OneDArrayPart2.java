@@ -1,5 +1,6 @@
 package datastructures;
 
+import java.io.*;
 import java.util.*;
 
 public class OneDArrayPart2 {
@@ -8,8 +9,10 @@ public class OneDArrayPart2 {
         return false;
     }
 
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+//        Scanner scan = new Scanner(System.in);
+        File file = new File("src/datastructures/OneDArrayPart2.in");
+        Scanner scan = new Scanner(file);
         int q = scan.nextInt();
         while (q-- > 0) {
             int n = scan.nextInt();
