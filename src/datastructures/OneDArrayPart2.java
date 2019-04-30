@@ -6,7 +6,17 @@ import java.util.*;
 public class OneDArrayPart2 {
 
     public static boolean canWin(int leap, int[] game) {
-        return false;
+        return canWin(leap, game, 0);
+    }
+
+    private static boolean canWin(int leap, int[] game, int i) {
+        if (i < 0 || game[i] == 1) return false;
+        if (i == game.length - 1 || i + leap >= game.length) return true;
+
+        game[i] = 1;
+        return canWin(leap, game, i + 1) ||
+                canWin(leap, game, i + leap) ||
+                canWin(leap, game, i - 1);
     }
 
     public static void main(String[] args) throws IOException {
