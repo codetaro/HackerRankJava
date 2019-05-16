@@ -11,15 +11,45 @@ import java.util.regex.*;
 public class Anagrams {
 
     // Complete the sherlockAndAnagrams function below.
-    static int sherlockAndAnagrams(String s) {
-        int pairs = 0;
-
+    /*static int sherlockAndAnagrams(String s) {
         Map<Integer, List<String>> m = new HashMap<>();
         for (int i = 1; i < s.length(); i++) {
             m.put(i, subStrLst(s, i));
         }
 
-        return pairs;
+        return pairsOfAnagrams(m);
+    }*/
+    static int sherlockAndAnagrams(String s) {
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+
+        // Keep track of how many anagrams we've seen
+        int totalCount = 0;
+
+        // Generate all substrings (N^2)
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = i + 1; j <= s.length(); j++) {
+                String currentSubString = s.substring(i, j);
+
+                // Sort all strings E.g. ab & ba both == ab now
+                char[] chars = currentSubString.toCharArray();
+                Arrays.sort(chars);
+                currentSubString = String.valueOf(chars);
+
+                // If sorted substring has been seen before
+                if (map.containsKey(currentSubString)) {
+                    // Check how many times we've seen it and add that amount to the count
+                    int value = map.get(currentSubString);
+                    totalCount = totalCount + value;
+
+                    // Increment the times we've seen the string
+                    map.put(currentSubString, value + 1);
+                } else {
+                    // Never seen it before = insert and set to 1 to indiciate we've now seen it
+                    map.put(currentSubString, 1);
+                }
+            }
+        }
+        return totalCount;
     }
 
     static List<String> subStrLst(String s, int len) {
@@ -33,13 +63,34 @@ public class Anagrams {
     static int pairsOfAnagrams(Map<Integer, List<String>> map) {
         int pairs = 0;
 
-        for (Integer key : map.keySet()) {
-            for (String s : map.get(key)) {
-                // TODO
+        for (List<String> lst : map.values()) {
+            for (int i = 0; i < lst.size() - 1; i++) {
+                for (int j = i + 1; j < lst.size(); j++) {
+                    List<Character> lst1 = toCharLst(lst.get(i));
+                    List<Character> lst2 = toCharLst(lst.get(j));
+                    if (lst1.equals(lst2)) pairs++;
+                }
             }
         }
 
         return pairs;
+    }
+
+    static List<Character> toCharLst(String s) {
+        List<Character> charLst = new ArrayList<>();
+        for (char c : s.toCharArray()) {
+            charLst.add(c);
+        }
+        charLst.sort(Character::compareTo);
+        return charLst;
+    }
+
+    static Set<Character> toCharSet(String s) {
+        Set<Character> charSet = new HashSet<>();
+        for (char c : s.toCharArray()) {
+            charSet.add(c);
+        }
+        return charSet;
     }
 
     private static final Scanner scanner = new Scanner(System.in);
